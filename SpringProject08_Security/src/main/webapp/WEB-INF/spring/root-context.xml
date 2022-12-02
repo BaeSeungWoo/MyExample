@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		<bean id = "hikariConfig" class = "com.zaxxer.hikari.HikariConfig">
+		<property name = "driverClassName" value = "com.mysql.cj.jdbc.Driver"></property>
+		<property name = "jdbcUrl" value = "jdbc:mysql://localhost:3306/big9_spring?useSSL=false&amp;serverTimezone=Asia/Seoul&amp;characterEncoding=UTF-8"></property>
+		<property name = "username" value = "root"></property>
+		<property name = "password" value = "1234"></property>
+		</bean>
+		
+		<bean id = "dataSource" class = "com.zaxxer.hikari.HikariDataSource" destroy-method = "close">
+		<constructor-arg ref = "hikariConfig"></constructor-arg>
+		</bean>
+		
+    <!-- Mybatis -->
+	    <bean id = "sqlSessionFactoryBean" class = "org.mybatis.spring.SqlSessionFactoryBean">
+	    <property name = "dataSource" ref = "dataSource"></property>    
+	    </bean>
+	    
+	    <!-- 트랜잭션 설정  : 트랜잭션을 사용하려면 서비스 영역에 트랜잭션을 넣어야함(서버의 부하때문) 
+	      , 또한 트랜잭션을 사용하는 모델은 servlet이 아닌 root에 들어가야함-->
+	    <bean id = "transactionManager" class = "org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	    <property name = "dataSource" ref = "dataSource"></property>
+	    </bean>
+	 <tx:annotation-driven/>
+	    
+	    
+	<mybatis-spring:scan base-package="com.mysecurity.mapper"/>     
+</beans>
