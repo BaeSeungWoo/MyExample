@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.myboard.mapper.MemberMapper">
+
+<insert id = "join">
+insert into member(id, name, pass, addr) values(#{id},#{name}, #{pass}, #{addr})
+</insert>
+
+<select id = "idCheck" resultType = "int">
+select count(*) from member where id = #{id}
+</select>
+
+<select id = "loginCheck" resultType = "com.myboard.dto.MemberDTO">
+select * from member where id = #{id}
+</select>
+
+<update id = "update">
+update member set name = #{name}, pass = #{pass}, addr = #{addr} where id = #{id}
+</update>
+
+</mapper>
