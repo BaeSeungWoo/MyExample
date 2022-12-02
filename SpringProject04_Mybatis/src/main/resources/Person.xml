@@ -1,0 +1,60 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.myspring.Person">
+<sql id = "search">
+<where> 
+<if test = "word !=null and field == 'name'">
+name like CONCAT('%',#{word},'%')
+</if>
+<if test = "word !=null and field == 'job'">
+job like CONCAT('%',#{word},'%')
+</if>
+</where>
+</sql>
+
+<!-- 추가 -->
+<insert id = "insertPerson" parameterType = "com.myspring.vo.PersonVO">
+insert into person values(#{id},#{name},#{password},#{gender},#{job})
+</insert>
+
+<!-- 전체보기(검색) -->
+<select id = "searchPerson" resultType = "com.myspring.vo.PersonVO" parameterType = "java.util.Map">
+select * from person
+<include refid = "search"/>
+</select>
+
+<!-- 전체보기 -->
+<select id = "listPerson" resultType = "com.myspring.vo.PersonVO">
+select * from person
+</select>
+
+<!-- 상세보기 -->
+<select id = "ViewPerson" parameterType = "String" resultType = "com.myspring.vo.PersonVO">
+select * from person where id = #{id}
+</select>
+
+<!-- 수정 -->
+<update id = "UpdatePerson" parameterType = "com.myspring.vo.PersonVO">
+update person set name = #{name}, password = #{password}, gender = #{gender}, job = #{job} where id = #{id}
+</update>
+
+<!-- 삭제 -->
+<delete id="DeletePerson" parameterType = "String">
+delete from person where id = #{id}
+</delete>
+
+<!-- 개수 -->
+<select id = "CountPerson" resultType = "int">
+select count(*) from person
+</select>
+
+<!-- 개수(검색) -->
+<select id = "searchCount" parameterType = "java.util.Map" resultType = "int">
+select count(*) from person
+<include refid = "search"/>
+</select>
+
+</mapper>
